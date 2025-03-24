@@ -1,0 +1,78 @@
+using System.Text;
+using CRMSystem.WebAPI.Auth;
+using CRMSystem.WebAPI.Core;
+using CRMSystem.WebAPI.Enums;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+
+namespace CRMSystem.WebAPI.Extensions
+{
+    public static class ApiExtensions
+    {
+        public static void AddDbConnection(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<SchoolDbContext>(options =>
+                options.UseNpgsql(configuration.GetConnectionString(nameof(SchoolDbContext))));
+        }
+
+        public static void AddDbInitialization(this IApplicationBuilder app)
+        {
+            using var serviceScope = app.ApplicationServices.CreateScope();
+            var services = serviceScope.ServiceProvider;
+            var schoolContext = services.GetRequiredService<SchoolDbContext>();
+            DbInitializer.Initialize(schoolContext);
+        }
+
+        public static void AddApiAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            var jwtOptions = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions!.SecretKey))
+                    };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Cookies["jwt"];
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
+
+            services.AddAuthorization();
+        }
+
+        public static void AddAuthorizationPolicy(this IServiceCollection services)
+        {
+            services.AddAuthorizationBuilder()
+                .AddPolicy(AuthorizationPolicies.AdminOnly, policy =>
+                    policy.RequireRole(((int)Roles.Admin).ToString()))
+                .AddPolicy(AuthorizationPolicies.UserOnly, policy =>
+                    policy.RequireRole(((int)Roles.User).ToString()))
+                .AddPolicy(AuthorizationPolicies.UserOrAdmin, policy =>
+                    policy.RequireRole(((int)Roles.User).ToString(), ((int)Roles.Admin).ToString()));
+        }
+
+        public static void AddCookiePolicy(this IApplicationBuilder app)
+        {
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+                HttpOnly = HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.Always
+            });
+        }
+    }
+}

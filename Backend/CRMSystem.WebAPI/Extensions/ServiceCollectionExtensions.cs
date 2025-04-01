@@ -37,6 +37,8 @@ namespace CRMSystem.WebAPI.Extensions
             services.AddScoped<StudentService>();
             services.AddScoped<UserService>();
             
+            services.AddScoped<StudentRegistrationService>();
+            
             // AutoMapper Profiles
             services.AddAutoMapper(typeof(ContactProfile).Assembly);
             services.AddAutoMapper(typeof(ContractProfile).Assembly);

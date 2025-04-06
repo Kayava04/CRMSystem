@@ -10,12 +10,14 @@ namespace CRMSystem.WebAPI.Services
         public async Task<IEnumerable<ContractDto>> GetAllAsync()
         {
             var contracts = await contractRepository.GetAllAsync();
+            
             return mapper.Map<IEnumerable<ContractDto>>(contracts);
         }
 
         public async Task<ContractDto?> GetByIdAsync(Guid id)
         {
             var contract = await contractRepository.GetByIdAsync(id);
+            
             return contract is null ? null : mapper.Map<ContractDto>(contract);
         }
 
@@ -23,6 +25,7 @@ namespace CRMSystem.WebAPI.Services
         {
             var contract = Contract.Create(Guid.NewGuid(), dto.ContractNumber, dto.SignDate, dto.PaymentAmount, dto.StudentId);
             var created = await contractRepository.AddAsync(contract);
+            
             return mapper.Map<ContractDto>(created);
         }
 
@@ -30,6 +33,7 @@ namespace CRMSystem.WebAPI.Services
         {
             var contract = Contract.Create(id, dto.ContractNumber, dto.SignDate, dto.PaymentAmount, dto.StudentId);
             var updated = await contractRepository.UpdateAsync(id, contract);
+            
             return updated is null ? null : mapper.Map<ContractDto>(updated);
         }
 

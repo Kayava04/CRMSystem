@@ -12,13 +12,19 @@ namespace CRMSystem.WebAPI.Repositories
     {
         public async Task<Group?> GetByIdAsync(Guid id)
         {
-            var entity = await context.Groups.AsNoTracking().FirstOrDefaultAsync(g => g.Id == id);
+            var entity = await context.Groups
+                .AsNoTracking()
+                .FirstOrDefaultAsync(g => g.Id == id);
+            
             return mapper.Map<Group>(entity);
         }
 
         public async Task<IEnumerable<Group>> GetAllAsync()
         {
-            var entities = await context.Groups.AsNoTracking().ToListAsync();
+            var entities = await context.Groups
+                .AsNoTracking()
+                .ToListAsync();
+            
             return mapper.Map<IEnumerable<Group>>(entities);
         }
 
@@ -26,24 +32,31 @@ namespace CRMSystem.WebAPI.Repositories
         {
             var entity = mapper.Map<GroupEntity>(group);
             await context.Groups.AddAsync(entity);
+            
             await context.SaveChangesAsync();
             return mapper.Map<Group>(entity);
         }
 
         public async Task<Group?> UpdateAsync(Guid id, Group group)
         {
-            var existing = await context.Groups.FirstOrDefaultAsync(g => g.Id == id);
-            if (existing == null) return null;
+            var existing = await context.Groups
+                .FirstOrDefaultAsync(g => g.Id == id);
+            
+            if (existing == null)
+                return null;
 
-            context.Entry(existing).CurrentValues.SetValues(mapper.Map<GroupEntity>(group));
+            context.Entry(existing)
+                .CurrentValues.SetValues(mapper.Map<GroupEntity>(group));
+            
             await context.SaveChangesAsync();
-
             return mapper.Map<Group>(existing);
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            var entity = await context.Groups.FirstOrDefaultAsync(g => g.Id == id);
+            var entity = await context.Groups
+                .FirstOrDefaultAsync(g => g.Id == id);
+            
             if (entity != null)
             {
                 context.Groups.Remove(entity);

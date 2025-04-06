@@ -15,5 +15,8 @@ namespace CRMSystem.WebAPI.Controllers
             var result = await service.CreateStudentAsync(dto);
             return Ok(result);
         }
+        
+        //TODO: Write a new CRUD methods for full student
+        //      Add SeriLog for this endpoint
     }
 }

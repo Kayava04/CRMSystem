@@ -12,13 +12,19 @@ namespace CRMSystem.WebAPI.Repositories
     {
         public async Task<Employee?> GetByIdAsync(Guid id)
         {
-            var entity = await context.Employees.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+            var entity = await context.Employees
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == id);
+            
             return mapper.Map<Employee>(entity);
         }
 
         public async Task<IEnumerable<Employee>> GetAllAsync()
         {
-            var entities = await context.Employees.AsNoTracking().ToListAsync();
+            var entities = await context.Employees
+                .AsNoTracking()
+                .ToListAsync();
+            
             return mapper.Map<IEnumerable<Employee>>(entities);
         }
 
@@ -26,24 +32,31 @@ namespace CRMSystem.WebAPI.Repositories
         {
             var entity = mapper.Map<EmployeeEntity>(employee);
             await context.Employees.AddAsync(entity);
+            
             await context.SaveChangesAsync();
             return mapper.Map<Employee>(entity);
         }
 
         public async Task<Employee?> UpdateAsync(Guid id, Employee employee)
         {
-            var existing = await context.Employees.FirstOrDefaultAsync(e => e.Id == id);
-            if (existing == null) return null;
+            var existing = await context.Employees
+                .FirstOrDefaultAsync(e => e.Id == id);
+            
+            if (existing == null)
+                return null;
 
-            context.Entry(existing).CurrentValues.SetValues(mapper.Map<EmployeeEntity>(employee));
+            context.Entry(existing)
+                .CurrentValues.SetValues(mapper.Map<EmployeeEntity>(employee));
+            
             await context.SaveChangesAsync();
-
             return mapper.Map<Employee>(existing);
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            var entity = await context.Employees.FirstOrDefaultAsync(e => e.Id == id);
+            var entity = await context.Employees
+                .FirstOrDefaultAsync(e => e.Id == id);
+            
             if (entity != null)
             {
                 context.Employees.Remove(entity);

@@ -10,12 +10,14 @@ namespace CRMSystem.WebAPI.Services
         public async Task<IEnumerable<LanguageDto>> GetAllAsync()
         {
             var languages = await languageRepository.GetAllAsync();
+            
             return mapper.Map<IEnumerable<LanguageDto>>(languages);
         }
 
         public async Task<LanguageDto?> GetByIdAsync(Guid id)
         {
             var language = await languageRepository.GetByIdAsync(id);
+            
             return language is null ? null : mapper.Map<LanguageDto>(language);
         }
 
@@ -23,6 +25,7 @@ namespace CRMSystem.WebAPI.Services
         {
             var language = Language.Create(Guid.NewGuid(), dto.Name);
             var created = await languageRepository.AddAsync(language);
+            
             return mapper.Map<LanguageDto>(created);
         }
 
@@ -30,6 +33,7 @@ namespace CRMSystem.WebAPI.Services
         {
             var language = Language.Create(id, dto.Name);
             var updated = await languageRepository.UpdateAsync(id, language);
+            
             return updated is null ? null : mapper.Map<LanguageDto>(updated);
         }
 

@@ -10,12 +10,14 @@ namespace CRMSystem.WebAPI.Services
         public async Task<IEnumerable<PersonDto>> GetAllAsync()
         {
             var people = await personRepository.GetAllAsync();
+            
             return mapper.Map<IEnumerable<PersonDto>>(people);
         }
 
         public async Task<PersonDto?> GetByIdAsync(Guid id)
         {
             var person = await personRepository.GetByIdAsync(id);
+            
             return person is null ? null : mapper.Map<PersonDto>(person);
         }
 
@@ -23,6 +25,7 @@ namespace CRMSystem.WebAPI.Services
         {
             var person = Person.Create(Guid.NewGuid(), dto.FullName, dto.BirthDate);
             var created = await personRepository.AddAsync(person);
+            
             return mapper.Map<PersonDto>(created);
         }
 
@@ -30,6 +33,7 @@ namespace CRMSystem.WebAPI.Services
         {
             var person = Person.Create(id, dto.FullName, dto.BirthDate);
             var updated = await personRepository.UpdateAsync(id, person);
+            
             return updated is null ? null : mapper.Map<PersonDto>(updated);
         }
 

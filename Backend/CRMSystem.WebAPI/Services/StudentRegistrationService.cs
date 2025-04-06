@@ -1,6 +1,6 @@
+using AutoMapper;
 using CRMSystem.WebAPI.Interfaces;
 using CRMSystem.WebAPI.Models;
-using AutoMapper;
 using CRMSystem.WebAPI.DTOs.School.Contacts;
 using CRMSystem.WebAPI.DTOs.School.Contracts;
 using CRMSystem.WebAPI.DTOs.School.Groups;
@@ -48,7 +48,7 @@ namespace CRMSystem.WebAPI.Services
                 lessonDays.Add(mapper.Map<LessonDayDto>(createdLessonDay));
             }
 
-            Person? createdParent = null;
+            Person? createdParent;
             Person createdPerson;
             
             if (dto.IsParentRegister)

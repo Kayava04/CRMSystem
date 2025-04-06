@@ -12,7 +12,10 @@ namespace CRMSystem.WebAPI.Repositories
     {
         public async Task<IEnumerable<GroupLessonDay>> GetAllAsync()
         {
-            var entities = await context.GroupLessonDays.AsNoTracking().ToListAsync();
+            var entities = await context.GroupLessonDays
+                .AsNoTracking()
+                .ToListAsync();
+            
             return mapper.Map<IEnumerable<GroupLessonDay>>(entities);
         }
 
@@ -29,6 +32,7 @@ namespace CRMSystem.WebAPI.Repositories
         {
             var entity = mapper.Map<GroupLessonDayEntity>(model);
             await context.GroupLessonDays.AddAsync(entity);
+            
             await context.SaveChangesAsync();
             return mapper.Map<GroupLessonDay>(entity);
         }

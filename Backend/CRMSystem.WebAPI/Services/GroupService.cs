@@ -10,12 +10,14 @@ namespace CRMSystem.WebAPI.Services
         public async Task<IEnumerable<GroupDto>> GetAllAsync()
         {
             var groups = await groupRepository.GetAllAsync();
+            
             return mapper.Map<IEnumerable<GroupDto>>(groups);
         }
 
         public async Task<GroupDto?> GetByIdAsync(Guid id)
         {
             var group = await groupRepository.GetByIdAsync(id);
+            
             return group is null ? null : mapper.Map<GroupDto>(group);
         }
 
@@ -23,6 +25,7 @@ namespace CRMSystem.WebAPI.Services
         {
             var group = Group.Create(Guid.NewGuid(), dto.GroupName, dto.LanguageId);
             var created = await groupRepository.AddAsync(group);
+            
             return mapper.Map<GroupDto>(created);
         }
 
@@ -30,6 +33,7 @@ namespace CRMSystem.WebAPI.Services
         {
             var group = Group.Create(id, dto.GroupName, dto.LanguageId);
             var updated = await groupRepository.UpdateAsync(id, group);
+            
             return updated is null ? null : mapper.Map<GroupDto>(updated);
         }
 

@@ -12,13 +12,19 @@ namespace CRMSystem.WebAPI.Repositories
     {
         public async Task<Language?> GetByIdAsync(Guid id)
         {
-            var entity = await context.Languages.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id);
+            var entity = await context.Languages
+                .AsNoTracking()
+                .FirstOrDefaultAsync(l => l.Id == id);
+            
             return mapper.Map<Language>(entity);
         }
 
         public async Task<IEnumerable<Language>> GetAllAsync()
         {
-            var entities = await context.Languages.AsNoTracking().ToListAsync();
+            var entities = await context.Languages
+                .AsNoTracking()
+                .ToListAsync();
+            
             return mapper.Map<IEnumerable<Language>>(entities);
         }
 
@@ -26,24 +32,31 @@ namespace CRMSystem.WebAPI.Repositories
         {
             var entity = mapper.Map<LanguageEntity>(language);
             await context.Languages.AddAsync(entity);
+            
             await context.SaveChangesAsync();
             return mapper.Map<Language>(entity);
         }
 
         public async Task<Language?> UpdateAsync(Guid id, Language language)
         {
-            var existing = await context.Languages.FirstOrDefaultAsync(l => l.Id == id);
-            if (existing == null) return null;
+            var existing = await context.Languages
+                .FirstOrDefaultAsync(l => l.Id == id);
+            
+            if (existing == null)
+                return null;
 
-            context.Entry(existing).CurrentValues.SetValues(mapper.Map<LanguageEntity>(language));
+            context.Entry(existing)
+                .CurrentValues.SetValues(mapper.Map<LanguageEntity>(language));
+            
             await context.SaveChangesAsync();
-
             return mapper.Map<Language>(existing);
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            var entity = await context.Languages.FirstOrDefaultAsync(l => l.Id == id);
+            var entity = await context.Languages
+                .FirstOrDefaultAsync(l => l.Id == id);
+            
             if (entity != null)
             {
                 context.Languages.Remove(entity);

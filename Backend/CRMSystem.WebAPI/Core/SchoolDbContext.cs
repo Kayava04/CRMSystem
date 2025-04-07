@@ -1,5 +1,6 @@
 using CRMSystem.WebAPI.Entities.School;
 using CRMSystem.WebAPI.Entities.Auth;
+using CRMSystem.WebAPI.Entities.Email;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRMSystem.WebAPI.Core
@@ -22,6 +23,9 @@ namespace CRMSystem.WebAPI.Core
         // Auth
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
+        
+        // Email
+        public DbSet<MessageEntity> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

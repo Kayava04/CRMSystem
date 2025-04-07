@@ -11,8 +11,8 @@ namespace CRMSystem.WebAPI.Mappers
         {
             CreateMap<StudentGroupEntity, StudentGroup>().ConstructUsing(e =>
                 StudentGroup.Create(e.Id, e.StudentId, e.GroupId, e.Level, e.PairNumber));
+            
             CreateMap<StudentGroup, StudentGroupEntity>();
-
             CreateMap<StudentGroup, StudentGroupDto>();
             CreateMap<CreateStudentGroupDto, StudentGroup>();
         }

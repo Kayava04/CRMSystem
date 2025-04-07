@@ -11,8 +11,8 @@ namespace CRMSystem.WebAPI.Mappers
         {
             CreateMap<GroupLessonDayEntity, GroupLessonDay>().ConstructUsing(e =>
                 GroupLessonDay.Create(e.GroupId, e.LessonDayId));
+            
             CreateMap<GroupLessonDay, GroupLessonDayEntity>();
-
             CreateMap<GroupLessonDay, GroupLessonDayDto>();
             CreateMap<CreateGroupLessonDayDto, GroupLessonDay>();
         }

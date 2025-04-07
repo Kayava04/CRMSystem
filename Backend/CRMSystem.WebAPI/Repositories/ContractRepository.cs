@@ -42,8 +42,7 @@ namespace CRMSystem.WebAPI.Repositories
             var existing = await context.Contracts
                 .FirstOrDefaultAsync(c => c.Id == id);
             
-            if (existing == null)
-                return null;
+            if (existing == null) return null;
 
             context.Entry(existing)
                 .CurrentValues.SetValues(mapper.Map<ContractEntity>(contract));

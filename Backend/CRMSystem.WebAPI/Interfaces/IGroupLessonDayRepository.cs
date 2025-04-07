@@ -4,8 +4,8 @@ namespace CRMSystem.WebAPI.Interfaces
 {
     public interface IGroupLessonDayRepository
     {
+        Task<GroupLessonDay?> GetByIdAsync(Guid groupId, Guid lessonDayId);
         Task<IEnumerable<GroupLessonDay>> GetAllAsync();
-        Task<GroupLessonDay?> GetByIdsAsync(Guid groupId, Guid lessonDayId);
         Task<GroupLessonDay> AddAsync(GroupLessonDay entity);
         Task DeleteAsync(Guid groupId, Guid lessonDayId);
     }

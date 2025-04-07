@@ -39,17 +39,15 @@ namespace CRMSystem.WebAPI.Repositories
 
         public async Task<Employee?> UpdateAsync(Guid id, Employee employee)
         {
-            var existing = await context.Employees
+            var entity = await context.Employees
                 .FirstOrDefaultAsync(e => e.Id == id);
             
-            if (existing == null)
-                return null;
+            if (entity == null) return null;
 
-            context.Entry(existing)
-                .CurrentValues.SetValues(mapper.Map<EmployeeEntity>(employee));
+            mapper.Map(employee, entity);
             
             await context.SaveChangesAsync();
-            return mapper.Map<Employee>(existing);
+            return mapper.Map<Employee>(entity);
         }
 
         public async Task DeleteAsync(Guid id)

@@ -7,18 +7,18 @@ namespace CRMSystem.WebAPI.Services
 {
     public class GroupLessonDayService(IGroupLessonDayRepository repository, IMapper mapper)
     {
+        public async Task<GroupLessonDayDto?> GetByIdAsync(Guid groupId, Guid lessonDayId)
+        {
+            var result = await repository.GetByIdAsync(groupId, lessonDayId);
+            
+            return result is null ? null : mapper.Map<GroupLessonDayDto>(result);
+        }
+        
         public async Task<IEnumerable<GroupLessonDayDto>> GetAllAsync()
         {
             var data = await repository.GetAllAsync();
             
             return mapper.Map<IEnumerable<GroupLessonDayDto>>(data);
-        }
-
-        public async Task<GroupLessonDayDto?> GetByIdsAsync(Guid groupId, Guid lessonDayId)
-        {
-            var result = await repository.GetByIdsAsync(groupId, lessonDayId);
-            
-            return result is null ? null : mapper.Map<GroupLessonDayDto>(result);
         }
 
         public async Task<GroupLessonDayDto> CreateAsync(CreateGroupLessonDayDto dto)

@@ -11,8 +11,8 @@ namespace CRMSystem.WebAPI.Mappers
         {
             CreateMap<LanguageEntity, Language>().ConstructUsing(e =>
                 Language.Create(e.Id, e.Name));
+            
             CreateMap<Language, LanguageEntity>();
-
             CreateMap<Language, LanguageDto>();
             CreateMap<CreateLanguageDto, Language>();
         }

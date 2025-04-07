@@ -15,5 +15,7 @@ namespace CRMSystem.WebAPI.Models
 
         public static Employee Create(Guid id, Guid personId, string position) =>
             new(id, personId, position);
+        
+        public void Update(string position) => Position = position;
     }
 }

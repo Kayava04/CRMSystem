@@ -9,6 +9,7 @@ builder.Services.AddDbConnection(configuration);
 // Adding Services
 builder.Services.AddApplicationServices();
 builder.Services.AddAuthenticationServices(configuration);
+builder.Services.AddSmtpConfiguration(configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

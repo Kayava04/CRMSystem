@@ -11,8 +11,8 @@ namespace CRMSystem.WebAPI.Mappers
         {
             CreateMap<PersonEntity, Person>().ConstructUsing(e =>
                 Person.Create(e.Id, e.FullName, e.BirthDate));
+            
             CreateMap<Person, PersonEntity>();
-
             CreateMap<Person, PersonDto>();
             CreateMap<CreatePersonDto, Person>();
         }

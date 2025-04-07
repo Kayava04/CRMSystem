@@ -17,5 +17,7 @@ namespace CRMSystem.WebAPI.Models
 
         public static Contact Create(Guid id, Guid personId, string phone, string email) =>
             new(id, personId, phone, email);
+        
+        public void Update(string phone, string email) => (Phone, Email) = (phone, email);
     }
 }

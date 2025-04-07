@@ -17,9 +17,9 @@ namespace CRMSystem.WebAPI.Controllers
         }
 
         [HttpGet("{groupId:guid}/{lessonDayId:guid}")]
-        public async Task<IActionResult> GetByIds(Guid groupId, Guid lessonDayId)
+        public async Task<IActionResult> GetById(Guid groupId, Guid lessonDayId)
         {
-            var item = await service.GetByIdsAsync(groupId, lessonDayId);
+            var item = await service.GetByIdAsync(groupId, lessonDayId);
             return item is null ? NotFound() : Ok(item);
         }
 

@@ -23,6 +23,7 @@ namespace CRMSystem.WebAPI.Extensions
             services.AddScoped<IBasicRepository<StudentGroup>, StudentGroupRepository>();
             services.AddScoped<IBasicRepository<Student>, StudentRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IEmailRepository, EmailRepository>();
             
             // Registration Services
             services.AddScoped<ContactService>();
@@ -36,8 +37,9 @@ namespace CRMSystem.WebAPI.Extensions
             services.AddScoped<StudentGroupService>();
             services.AddScoped<StudentService>();
             services.AddScoped<UserService>();
-            
             services.AddScoped<StudentRegistrationService>();
+            services.AddScoped<EmployeeRegistrationService>();
+            services.AddScoped<EmailService>();
             
             // AutoMapper Profiles
             services.AddAutoMapper(typeof(ContactProfile).Assembly);
@@ -51,6 +53,7 @@ namespace CRMSystem.WebAPI.Extensions
             services.AddAutoMapper(typeof(StudentGroupProfile).Assembly);
             services.AddAutoMapper(typeof(StudentProfile).Assembly);
             services.AddAutoMapper(typeof(UserProfile).Assembly);
+            services.AddAutoMapper(typeof(MessageProfile).Assembly);
             
             return services;
         }

@@ -1,6 +1,7 @@
 using System.Text;
 using CRMSystem.WebAPI.Auth;
 using CRMSystem.WebAPI.Core;
+using CRMSystem.WebAPI.Email;
 using CRMSystem.WebAPI.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -73,6 +74,16 @@ namespace CRMSystem.WebAPI.Extensions
                 HttpOnly = HttpOnlyPolicy.Always,
                 Secure = CookieSecurePolicy.Always
             });
+        }
+        
+        public static void AddSmtpConfiguration(this IServiceCollection services, ConfigurationManager configuration)
+        {
+            configuration
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("smtpcredentials.json", optional: false, reloadOnChange: true);
+            
+            services.Configure<SmtpSettings>(configuration.GetSection("SmtpSettings"));
+            services.Configure<EmailCredentials>(configuration.GetSection("EmailCredentials"));
         }
     }
 }

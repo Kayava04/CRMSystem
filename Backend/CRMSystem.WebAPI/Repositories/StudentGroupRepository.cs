@@ -42,8 +42,7 @@ namespace CRMSystem.WebAPI.Repositories
             var existing = await context.StudentGroups
                 .FirstOrDefaultAsync(sg => sg.Id == id);
             
-            if (existing == null)
-                return null;
+            if (existing == null) return null;
 
             context.Entry(existing)
                 .CurrentValues.SetValues(mapper.Map<StudentGroupEntity>(model));

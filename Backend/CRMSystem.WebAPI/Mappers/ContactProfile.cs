@@ -11,8 +11,8 @@ namespace CRMSystem.WebAPI.Mappers
         {
             CreateMap<ContactEntity, Contact>().ConstructUsing(e =>
                 Contact.Create(e.Id, e.PersonId, e.Phone, e.Email));
+            
             CreateMap<Contact, ContactEntity>();
-
             CreateMap<Contact, ContactDto>();
             CreateMap<CreateContactDto, Contact>();
         }

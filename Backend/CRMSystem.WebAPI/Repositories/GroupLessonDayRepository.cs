@@ -10,6 +10,15 @@ namespace CRMSystem.WebAPI.Repositories
     public class GroupLessonDayRepository(SchoolDbContext context, IMapper mapper)
         : IGroupLessonDayRepository
     {
+        public async Task<GroupLessonDay?> GetByIdAsync(Guid groupId, Guid lessonDayId)
+        {
+            var entity = await context.GroupLessonDays
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.GroupId == groupId && e.LessonDayId == lessonDayId);
+
+            return mapper.Map<GroupLessonDay>(entity);
+        }
+        
         public async Task<IEnumerable<GroupLessonDay>> GetAllAsync()
         {
             var entities = await context.GroupLessonDays
@@ -17,15 +26,6 @@ namespace CRMSystem.WebAPI.Repositories
                 .ToListAsync();
             
             return mapper.Map<IEnumerable<GroupLessonDay>>(entities);
-        }
-
-        public async Task<GroupLessonDay?> GetByIdsAsync(Guid groupId, Guid lessonDayId)
-        {
-            var entity = await context.GroupLessonDays
-                .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.GroupId == groupId && e.LessonDayId == lessonDayId);
-
-            return mapper.Map<GroupLessonDay>(entity);
         }
 
         public async Task<GroupLessonDay> AddAsync(GroupLessonDay model)

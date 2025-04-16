@@ -19,7 +19,7 @@ namespace CRMSystem.WebAPI.Repositories
             return mapper.Map<Contract>(entity);
         }
 
-        public async Task<IEnumerable<Contract>> GetAllAsync()
+        public async Task<IEnumerable<Contract>> GetAllAsync(IFilterDto? filter = null)
         {
             var entities = await context.Contracts
                 .AsNoTracking()

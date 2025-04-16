@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using CRMSystem.WebAPI.Auth;
 using CRMSystem.WebAPI.Interfaces;
 using CRMSystem.WebAPI.Models;
@@ -31,6 +32,59 @@ namespace CRMSystem.WebAPI.Services
         
             var token = jwtProvider.GenerateToken(user);
             return token;
+        }
+
+        public async Task<string> UploadUserPhoto(Guid userId, IFormFile file, HttpRequest request)
+        {
+            if (file.Length == 0)
+                throw new InvalidOperationException("File is empty");
+            
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+            Directory.CreateDirectory(uploadsFolder);
+
+            using var sha256 = SHA256.Create();
+            await using var fileStream = file.OpenReadStream();
+            var fileHashBytes = await sha256.ComputeHashAsync(fileStream);
+            var fileHash = BitConverter.ToString(fileHashBytes).Replace("-", "").ToLower();
+            
+            var existingFilePath = Directory
+                .EnumerateFiles(uploadsFolder)
+                .FirstOrDefault(path => Path.GetFileNameWithoutExtension(path).StartsWith(fileHash));
+            
+            if (existingFilePath != null)
+            {
+                var existingFileName = Path.GetFileName(existingFilePath);
+                var existingImageUrl = $"{request.Scheme}://{request.Host}/uploads/{existingFileName}";
+
+                var user = await userRepository.GetUserByIdAsync(userId);
+                if (user == null) throw new InvalidOperationException("User not found");
+
+                if (user.ImageUrl != existingImageUrl)
+                {
+                    user.SetImageUrl(existingImageUrl);
+                    await userRepository.UpdateAsync(user);
+                }
+
+                return existingImageUrl;
+            }
+            
+            var extension = Path.GetExtension(file.FileName);
+            var newFileName = $"{fileHash}{extension}";
+            var newFilePath = Path.Combine(uploadsFolder, newFileName);
+
+            fileStream.Position = 0;
+            await using var saveStream = new FileStream(newFilePath, FileMode.Create);
+            await fileStream.CopyToAsync(saveStream);
+
+            var imageUrl = $"{request.Scheme}://{request.Host}/uploads/{newFileName}";
+
+            var userToUpdate = await userRepository.GetUserByIdAsync(userId);
+            if (userToUpdate == null) throw new InvalidOperationException("User not found");
+
+            userToUpdate.SetImageUrl(imageUrl);
+            await userRepository.UpdateAsync(userToUpdate);
+
+            return imageUrl;
         }
     }
 }

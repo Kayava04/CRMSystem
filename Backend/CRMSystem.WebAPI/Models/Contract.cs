@@ -19,5 +19,8 @@ namespace CRMSystem.WebAPI.Models
 
         public static Contract Create(Guid id, string contractNumber, DateTime signDate, decimal paymentAmount, Guid studentId) =>
             new(id, contractNumber, signDate, paymentAmount, studentId);
+        
+        public void Update(DateTime signDate, decimal paymentAmount) =>
+            (SignDate, PaymentAmount) = (signDate, paymentAmount);
     }
 }

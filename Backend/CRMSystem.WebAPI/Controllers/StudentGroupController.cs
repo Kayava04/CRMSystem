@@ -6,6 +6,7 @@ namespace CRMSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/student-groups")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class StudentGroupController(StudentGroupService service)
         : ControllerBase
     {

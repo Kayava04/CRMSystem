@@ -6,6 +6,7 @@ namespace CRMSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/contacts")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class ContactController(ContactService contactService)
         : ControllerBase
     {

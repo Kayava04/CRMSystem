@@ -16,6 +16,7 @@ namespace CRMSystem.WebAPI.Models
         public static Person Create(Guid id, string fullName, DateTime birthDate) =>
             new(id, fullName, birthDate);
         
-        public void Update(string fullName, DateTime birthDate) => (FullName, BirthDate) = (fullName, birthDate);
+        public void Update(string fullName, DateTime birthDate) =>
+            (FullName, BirthDate) = (fullName, birthDate);
     }
 }

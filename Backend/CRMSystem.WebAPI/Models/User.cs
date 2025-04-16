@@ -9,6 +9,7 @@ namespace CRMSystem.WebAPI.Models
         public string PasswordHash { get; private set; }
         public int RoleId { get; private set; }
         public DateTime CreatedAt { get; private set; }
+        public string? ImageUrl { get; private set; }
 
         private User(Guid id, string fullname, string email, string username, string passwordHash, int roleId)
         {
@@ -19,9 +20,12 @@ namespace CRMSystem.WebAPI.Models
             PasswordHash = passwordHash;
             RoleId = roleId;
             CreatedAt = DateTime.UtcNow;
+            ImageUrl = null;
         }
     
         public static User Create(Guid id, string fullname, string email, string username, string passwordHash, int roleId) =>
             new(id, fullname, email, username, passwordHash, roleId);
+
+        public void SetImageUrl(string imageUrl) => ImageUrl = imageUrl;
     }
 }

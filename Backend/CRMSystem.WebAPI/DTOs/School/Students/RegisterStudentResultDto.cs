@@ -1,23 +1,25 @@
-using CRMSystem.WebAPI.DTOs.School.Contacts;
-using CRMSystem.WebAPI.DTOs.School.Contracts;
-using CRMSystem.WebAPI.DTOs.School.Groups;
-using CRMSystem.WebAPI.DTOs.School.Languages;
-using CRMSystem.WebAPI.DTOs.School.LessonDays;
-using CRMSystem.WebAPI.DTOs.School.Persons;
-using CRMSystem.WebAPI.DTOs.School.StudentGroups;
-
 namespace CRMSystem.WebAPI.DTOs.School.Students
 {
     public class RegisterStudentResultDto
     {
-        public PersonDto Parent { get; set; }
-        public PersonDto Person { get; set; }
-        public StudentDto Student { get; set; }
-        public ContractDto Contract { get; set; }
-        public ContactDto Contact { get; set; }
-        public StudentGroupDto StudentGroup { get; set; }
-        public GroupDto Group { get; set; }
-        public LanguageDto Language { get; set; }
-        public List<LessonDayDto> LessonDays { get; set; } = [];
+        public Guid Id { get; set; }
+        public string? ParentFullName { get; set; }
+        public string FullName { get; set; }
+        public DateTime BirthDate { get; set; }
+        
+        public int? Grade { get; set; }
+        
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        
+        public string LanguageName { get; set; }
+        public string Level { get; set; }
+        public string GroupName { get; set; }
+        public string LessonDays { get; set; }
+        public int PairNumber { get; set; }
+        
+        public DateTime SignDate { get; set; }
+        public decimal PaymentAmount { get; set; }
+        public string ContractNumber { get; set; }
     }
 }

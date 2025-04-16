@@ -23,6 +23,8 @@ namespace CRMSystem.WebAPI.Mappers
                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.contact.Phone))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.contact.Email))
                 .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.employee.Position));
+            
+            CreateMap<RegisterEmployeeResultDto, RegisterEmployeeDto>();
         }
     }
 }

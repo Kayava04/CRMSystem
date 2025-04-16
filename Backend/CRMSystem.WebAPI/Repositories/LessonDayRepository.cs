@@ -19,7 +19,7 @@ namespace CRMSystem.WebAPI.Repositories
             return mapper.Map<LessonDay>(entity);
         }
 
-        public async Task<IEnumerable<LessonDay>> GetAllAsync()
+        public async Task<IEnumerable<LessonDay>> GetAllAsync(IFilterDto? filter = null)
         {
             var entities = await context.LessonDays
                 .AsNoTracking()

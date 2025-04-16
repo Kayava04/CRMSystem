@@ -6,6 +6,7 @@ namespace CRMSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/languages")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class LanguageController(LanguageService languageService)
         : ControllerBase
     {

@@ -6,6 +6,7 @@ namespace CRMSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/employees")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class EmployeeController(EmployeeService employeeService)
         : ControllerBase
     {

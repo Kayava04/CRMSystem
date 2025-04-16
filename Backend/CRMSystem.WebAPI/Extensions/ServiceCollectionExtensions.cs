@@ -1,9 +1,14 @@
 using CRMSystem.WebAPI.Auth;
+using CRMSystem.WebAPI.Custom;
+using CRMSystem.WebAPI.DTOs.School.Employees;
+using CRMSystem.WebAPI.DTOs.School.Students;
 using CRMSystem.WebAPI.Interfaces;
 using CRMSystem.WebAPI.Mappers;
 using CRMSystem.WebAPI.Models;
 using CRMSystem.WebAPI.Repositories;
 using CRMSystem.WebAPI.Services;
+using CRMSystem.WebAPI.Validators;
+using FileToolKit.IO.File.Extensions;
 
 namespace CRMSystem.WebAPI.Extensions
 {
@@ -40,6 +45,8 @@ namespace CRMSystem.WebAPI.Extensions
             services.AddScoped<StudentRegistrationService>();
             services.AddScoped<EmployeeRegistrationService>();
             services.AddScoped<EmailService>();
+            services.AddScoped<IFileService<RegisterEmployeeDto>, EmployeeFileService>();
+            services.AddScoped<IFileService<RegisterStudentDto>, StudentFileService>();
             
             // AutoMapper Profiles
             services.AddAutoMapper(typeof(ContactProfile).Assembly);
@@ -54,6 +61,16 @@ namespace CRMSystem.WebAPI.Extensions
             services.AddAutoMapper(typeof(StudentProfile).Assembly);
             services.AddAutoMapper(typeof(UserProfile).Assembly);
             services.AddAutoMapper(typeof(MessageProfile).Assembly);
+            
+            // FileToolKit Library Registration
+            services.AddFileToolKitFor<RegisterEmployeeDto>();
+            services.AddFileToolKitFor<RegisterStudentDto>();
+            
+            // Validators
+            services.AddScoped<IValidatorFactory, ValidatorFactory>();
+            
+            // ContractNumber Generator
+            services.AddScoped<IContractNumberGenerator, ContractNumberGenerator>();
             
             return services;
         }

@@ -6,6 +6,7 @@ namespace CRMSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/contracts")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class ContractController(ContractService contractService)
         : ControllerBase
     {

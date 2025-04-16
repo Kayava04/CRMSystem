@@ -3,6 +3,9 @@ using CRMSystem.WebAPI.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
+// Serilog
+builder.AddSerilogLogging();
+
 // Connection to Database
 builder.Services.AddDbConnection(configuration);
 

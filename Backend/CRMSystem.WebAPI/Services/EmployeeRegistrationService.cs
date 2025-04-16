@@ -38,9 +38,9 @@ namespace CRMSystem.WebAPI.Services
             return mapper.Map<RegisterEmployeeResultDto>((employee, person, contact));
         }
         
-        public async Task<IEnumerable<RegisterEmployeeResultDto>> GetAllEmployeesAsync()
+        public async Task<IEnumerable<RegisterEmployeeResultDto>> GetAllEmployeesAsync(EmployeeFilterDto? filter = null)
         {
-            var employees = await employeeRepository.GetAllAsync();
+            var employees = await employeeRepository.GetAllAsync(filter);
             var results = new List<RegisterEmployeeResultDto>();
 
             foreach (var employee in employees)

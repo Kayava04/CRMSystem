@@ -5,7 +5,10 @@ using CRMSystem.WebAPI.Models;
 
 namespace CRMSystem.WebAPI.Services
 {
-    public class ContractService(IBasicRepository<Contract> contractRepository, IMapper mapper)
+    public class ContractService(
+        IBasicRepository<Contract> contractRepository,
+        IContractNumberGenerator contractNumberGenerator,
+        IMapper mapper)
     {
         public async Task<IEnumerable<ContractDto>> GetAllAsync()
         {
@@ -23,7 +26,9 @@ namespace CRMSystem.WebAPI.Services
 
         public async Task<ContractDto> CreateAsync(CreateContractDto dto)
         {
-            var contract = Contract.Create(Guid.NewGuid(), dto.ContractNumber, dto.SignDate, dto.PaymentAmount, dto.StudentId);
+            var contractNumber = await contractNumberGenerator.Generate(dto.SignDate);
+            
+            var contract = Contract.Create(Guid.NewGuid(), contractNumber, dto.SignDate, dto.PaymentAmount, dto.StudentId);
             var created = await contractRepository.AddAsync(contract);
             
             return mapper.Map<ContractDto>(created);

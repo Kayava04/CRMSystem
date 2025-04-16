@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
 namespace CRMSystem.WebAPI.Extensions
 {
@@ -84,6 +85,16 @@ namespace CRMSystem.WebAPI.Extensions
             
             services.Configure<SmtpSettings>(configuration.GetSection("SmtpSettings"));
             services.Configure<EmailCredentials>(configuration.GetSection("EmailCredentials"));
+        }
+        
+        public static void AddSerilogLogging(this WebApplicationBuilder builder)
+        {
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .Enrich.FromLogContext()
+                .CreateLogger();
+
+            builder.Host.UseSerilog();
         }
     }
 }

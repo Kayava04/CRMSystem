@@ -17,5 +17,8 @@ namespace CRMSystem.WebAPI.Models
 
         public static Student Create(Guid id, Guid personId, Guid? parentId, int? grade) =>
             new(id, personId, parentId, grade);
+        
+        public void Update(Guid personId, Guid? parentId, int? grade) =>
+            (PersonId, ParentId, Grade) = (personId, parentId, grade);
     }
 }

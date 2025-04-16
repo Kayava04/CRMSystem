@@ -6,6 +6,7 @@ namespace CRMSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/groups")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class GroupController(GroupService groupService)
         : ControllerBase
     {

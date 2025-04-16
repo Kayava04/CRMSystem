@@ -1,5 +1,6 @@
 using AutoMapper;
 using CRMSystem.WebAPI.Core;
+using CRMSystem.WebAPI.DTOs.School.Employees;
 using CRMSystem.WebAPI.Entities.School;
 using CRMSystem.WebAPI.Interfaces;
 using CRMSystem.WebAPI.Models;
@@ -19,13 +20,38 @@ namespace CRMSystem.WebAPI.Repositories
             return mapper.Map<Employee>(entity);
         }
 
-        public async Task<IEnumerable<Employee>> GetAllAsync()
+        public async Task<IEnumerable<Employee>> GetAllAsync(IFilterDto? filter = null)
         {
-            var entities = await context.Employees
-                .AsNoTracking()
-                .ToListAsync();
+            var query = context.Employees
+                .Include(e => e.Person)
+                    .ThenInclude(p => p.Contacts)
+                        .AsNoTracking();
+
+            var employeeFilter = filter as EmployeeFilterDto;
             
-            return mapper.Map<IEnumerable<Employee>>(entities);
+            if (filter != null)
+            {
+                if (!string.IsNullOrWhiteSpace(employeeFilter.FullName))
+                    query = query.Where(e => e.Person.FullName
+                        .Contains(employeeFilter.FullName));
+
+                if (employeeFilter.BirthDate.HasValue)
+                    query = query.Where(e => e.Person.BirthDate.Date == employeeFilter.BirthDate.Value.Date);
+
+                if (!string.IsNullOrWhiteSpace(employeeFilter.Phone))
+                    query = query.Where(e => e.Person.Contacts
+                        .Any(c => c.Phone == employeeFilter.Phone));
+
+                if (!string.IsNullOrWhiteSpace(employeeFilter.Email))
+                    query = query.Where(e => e.Person.Contacts
+                        .Any(c => c.Email == employeeFilter.Email));
+
+                if (!string.IsNullOrWhiteSpace(employeeFilter.Position))
+                    query = query.Where(e => e.Position
+                        .Contains(employeeFilter.Position));
+            }
+                
+            return mapper.Map<IEnumerable<Employee>>(await query.ToListAsync());
         }
 
         public async Task<Employee> AddAsync(Employee employee)

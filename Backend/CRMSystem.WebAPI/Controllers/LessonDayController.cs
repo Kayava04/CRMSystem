@@ -6,6 +6,7 @@ namespace CRMSystem.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/lesson-days")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class LessonDayController(LessonDayService service)
         : ControllerBase
     {

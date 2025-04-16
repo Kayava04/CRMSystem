@@ -19,7 +19,7 @@ namespace CRMSystem.WebAPI.Repositories
             return mapper.Map<Group>(entity);
         }
 
-        public async Task<IEnumerable<Group>> GetAllAsync()
+        public async Task<IEnumerable<Group>> GetAllAsync(IFilterDto? filter = null)
         {
             var entities = await context.Groups
                 .AsNoTracking()

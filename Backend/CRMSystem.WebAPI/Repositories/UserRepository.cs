@@ -37,5 +37,27 @@ namespace CRMSystem.WebAPI.Repositories
         }
 
         public async Task<bool> IsEmptyAsync() => !await context.Users.AnyAsync();
+
+        public async Task<User?> GetUserByIdAsync(Guid id)
+        {
+            var userEntity = await context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == id);
+            
+            return userEntity == null ? null : mapper.Map<User>(userEntity);
+        }
+
+        public async Task UpdateAsync(User user)
+        {
+            var existingEntity = await context.Users
+                .FirstOrDefaultAsync(u => u.Id == user.Id);
+            
+            if (existingEntity == null)
+                throw new InvalidOperationException("User not found");
+            
+            mapper.Map(user, existingEntity);
+
+            await context.SaveChangesAsync();
+        }
     }
 }

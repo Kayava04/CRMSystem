@@ -19,6 +19,17 @@ namespace CRMSystem.WebAPI.Repositories
             return mapper.Map<GroupLessonDay>(entity);
         }
         
+        public async Task<List<LessonDay>> GetLessonDaysByGroupIdAsync(Guid groupId)
+        {
+            var groupLessonDays = await context.GroupLessonDays
+                .Where(gld => gld.GroupId == groupId)
+                    .Include(gld => gld.LessonDay)
+                        .Select(gld => gld.LessonDay)
+                            .ToListAsync();
+
+            return mapper.Map<List<LessonDay>>(groupLessonDays);
+        }
+        
         public async Task<IEnumerable<GroupLessonDay>> GetAllAsync()
         {
             var entities = await context.GroupLessonDays

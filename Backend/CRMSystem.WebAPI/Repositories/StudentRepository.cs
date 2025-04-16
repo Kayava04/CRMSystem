@@ -1,5 +1,6 @@
 using AutoMapper;
 using CRMSystem.WebAPI.Core;
+using CRMSystem.WebAPI.DTOs.School.Students;
 using CRMSystem.WebAPI.Entities.School;
 using CRMSystem.WebAPI.Interfaces;
 using CRMSystem.WebAPI.Models;
@@ -19,13 +20,70 @@ namespace CRMSystem.WebAPI.Repositories
             return mapper.Map<Student>(entity);
         }
 
-        public async Task<IEnumerable<Student>> GetAllAsync()
+        public async Task<IEnumerable<Student>> GetAllAsync(IFilterDto? filter = null)
         {
-            var entities = await context.Students
-                .AsNoTracking()
-                .ToListAsync();
-            
-            return mapper.Map<IEnumerable<Student>>(entities);
+            var query = context.Students
+                .Include(s => s.Person)
+                    .ThenInclude(p => p.Contacts)
+                        .AsNoTracking();
+
+            var studentFilter = filter as StudentFilterDto;
+
+            if (studentFilter != null)
+            {
+                if (!string.IsNullOrWhiteSpace(studentFilter.FullName))
+                    query = query.Where(s => s.Person.FullName
+                        .Contains(studentFilter.FullName));
+
+                if (studentFilter.BirthDate.HasValue)
+                    query = query.Where(s => s.Person.BirthDate.Date == studentFilter.BirthDate.Value.Date);
+
+                if (!string.IsNullOrWhiteSpace(studentFilter.Phone))
+                    query = query.Where(s => s.Person.Contacts
+                        .Any(c => c.Phone == studentFilter.Phone));
+
+                if (!string.IsNullOrWhiteSpace(studentFilter.Email))
+                    query = query.Where(s => s.Person.Contacts
+                        .Any(c => c.Email == studentFilter.Email));
+
+                if (studentFilter.Grade.HasValue)
+                    query = query.Where(s => s.Grade == studentFilter.Grade);
+
+                if (!string.IsNullOrWhiteSpace(studentFilter.ParentFullName))
+                {
+                    query = query.Where(s =>
+                        s.ParentId != null && context.Persons
+                            .Any(p => p.Id == s.ParentId && p.FullName
+                                .Contains(studentFilter.ParentFullName)));
+                }
+
+                if (!string.IsNullOrWhiteSpace(studentFilter.LanguageName))
+                    query = query.Where(s => s.StudentGroups
+                        .Any(sg => sg.Group.Language.Name.Contains(studentFilter.LanguageName)));
+                
+                if (!string.IsNullOrWhiteSpace(studentFilter.Level))
+                    query = query.Where(s => s.StudentGroups
+                        .Any(sg => sg.Level.Contains(studentFilter.Level)));
+                
+                if (!string.IsNullOrWhiteSpace(studentFilter.GroupName))
+                    query = query.Where(s => s.StudentGroups
+                        .Any(sg => sg.Group.GroupName.Contains(studentFilter.GroupName)));
+                
+                if (!string.IsNullOrWhiteSpace(studentFilter.LessonDay))
+                    query = query.Where(s => s.StudentGroups
+                        .Any(sg => sg.Group.GroupLessonDays
+                            .Any(gld => gld.LessonDay.DayOfWeek.Contains(studentFilter.LessonDay))));
+                
+                if (studentFilter.PairNumber.HasValue)
+                    query = query.Where(s => s.StudentGroups
+                        .Any(sg => sg.PairNumber == studentFilter.PairNumber));
+                
+                if (!string.IsNullOrWhiteSpace(studentFilter.ContractNumber))
+                    query = query.Where(s => s.Contracts
+                        .Any(c => c.ContractNumber.Contains(studentFilter.ContractNumber)));
+            }
+
+            return mapper.Map<IEnumerable<Student>>(await query.ToListAsync());
         }
 
         public async Task<Student> AddAsync(Student student)

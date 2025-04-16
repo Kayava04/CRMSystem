@@ -44,6 +44,12 @@ namespace CRMSystem.WebAPI.Validators
                 errorMessage = ValidationMessages.PositionIsRequired;
                 return false;
             }
+            
+            if (employee.Salary < 0)
+            {
+                errorMessage = ValidationMessages.SalaryMustBeCorrect;
+                return false;
+            }
 
             return true;
         }

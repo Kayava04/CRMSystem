@@ -13,6 +13,9 @@ namespace CRMSystem.WebAPI.Configurations.Auth
             builder.Property(u => u.FullName)
                 .IsRequired()
                 .HasMaxLength(255);
+            
+            builder.Property(u => u.BirthDate)
+                .IsRequired();
         
             builder.Property(u => u.Email)
                 .IsRequired()

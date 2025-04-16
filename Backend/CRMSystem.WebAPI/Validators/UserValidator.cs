@@ -23,27 +23,33 @@ namespace CRMSystem.WebAPI.Validators
             }
         }
 
-        private bool ValidateSignUp(SignUpRequestDto dto, out string errorMessage)
+        private bool ValidateSignUp(SignUpRequestDto user, out string errorMessage)
         {
-            if (string.IsNullOrWhiteSpace(dto.FullName) || dto.FullName.Length < 3)
+            if (string.IsNullOrWhiteSpace(user.FullName) || user.FullName.Length < 3)
             {
                 errorMessage = ValidationMessages.FullNameMustBeCorrect;
                 return false;
             }
+            
+            if (user.BirthDate == default)
+            {
+                errorMessage = ValidationMessages.BirthDateIsRequired;
+                return false;
+            }
 
-            if (!IsValidEmail(dto.Email))
+            if (!IsValidEmail(user.Email))
             {
                 errorMessage = ValidationMessages.EmailMustBeCorrect;
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(dto.Username) || dto.Username.Length < 4)
+            if (string.IsNullOrWhiteSpace(user.Username) || user.Username.Length < 4)
             {
                 errorMessage = ValidationMessages.UserNameMustBeCorrect;
                 return false;
             }
 
-            if (!IsValidPassword(dto.Password))
+            if (!IsValidPassword(user.Password))
             {
                 errorMessage = ValidationMessages.PasswordMustBeCorrect;
                 return false;
@@ -53,15 +59,15 @@ namespace CRMSystem.WebAPI.Validators
             return true;
         }
         
-        private bool ValidateSignIn(SignInRequestDto dto, out string errorMessage)
+        private bool ValidateSignIn(SignInRequestDto user, out string errorMessage)
         {
-            if (string.IsNullOrWhiteSpace(dto.Username))
+            if (string.IsNullOrWhiteSpace(user.Username))
             {
                 errorMessage = ValidationMessages.UsernameIsRequired;
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(dto.Password))
+            if (string.IsNullOrWhiteSpace(user.Password))
             {
                 errorMessage = ValidationMessages.PasswordIsRequired;
                 return false;

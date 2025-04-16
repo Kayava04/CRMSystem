@@ -10,14 +10,14 @@ namespace CRMSystem.WebAPI.Services
         IPasswordHasher passwordHasher,
         IJwtProvider jwtProvider)
     {
-        public async Task SignUp(string fullname, string email, string username, string password)
+        public async Task SignUp(string fullname, DateTime birthDate, string email, string username, string password)
         {
             var hashedPassword = passwordHasher.Generate(password);
 
             var isFirstUser = await userRepository.IsEmptyAsync();
             var roleId = isFirstUser ? 1 : 2;
         
-            var user = User.Create(Guid.NewGuid(), fullname, email, username, hashedPassword, roleId);
+            var user = User.Create(Guid.NewGuid(), fullname, birthDate, email, username, hashedPassword, roleId);
         
             await userRepository.AddAsync(user);
         }

@@ -14,6 +14,9 @@ namespace CRMSystem.WebAPI.Configurations.School
                 .IsRequired()
                 .HasMaxLength(100);
 
+            builder.Property(e => e.Salary)
+                .IsRequired();
+
             builder.HasOne(e => e.Person)
                 .WithMany()
                 .HasForeignKey(e => e.PersonId);

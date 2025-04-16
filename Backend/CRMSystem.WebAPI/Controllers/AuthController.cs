@@ -23,7 +23,7 @@ namespace CRMSystem.WebAPI.Controllers
                 return BadRequest(errorMessage);
             }
             
-            await userService.SignUp(request.FullName, request.Email, request.Username, request.Password);
+            await userService.SignUp(request.FullName, request.BirthDate, request.Email, request.Username, request.Password);
             
             logger.LogInformation($"User '{request.Username}' successfully signed up.");
             return Ok();

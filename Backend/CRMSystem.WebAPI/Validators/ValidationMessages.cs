@@ -9,6 +9,7 @@ namespace CRMSystem.WebAPI.Validators
         public const string PhoneNumberIsRequired = "Phone number is required!";
         public const string EmailIsRequired = "Email address is required!";
         public const string PositionIsRequired = "Position is required!";
+        public const string SalaryMustBeCorrect = "Salary cannot be negative!";
 
         // For Student Dto
         public const string InvalidStudentObject = "Student object is invalid!";
@@ -28,7 +29,6 @@ namespace CRMSystem.WebAPI.Validators
         public const string UserNameMustBeCorrect = "UserName must be at least 4 characters long!";
         public const string PasswordMustBeCorrect = "Password must be at least 6 characters long and contain at least one letter and one number!";
         public const string EmailMustBeCorrect = "Email Address must be a correct format!";
-        
         
         // For SignIn Dto
         public const string UsernameIsRequired = "Username is required!";

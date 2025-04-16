@@ -23,7 +23,7 @@ namespace CRMSystem.WebAPI.Services
 
         public async Task<EmployeeDto> CreateAsync(CreateEmployeeDto dto)
         {
-            var employee = Employee.Create(Guid.NewGuid(), dto.PersonId, dto.Position);
+            var employee = Employee.Create(Guid.NewGuid(), dto.PersonId, dto.Position, dto.Salary);
             var created = await employeeRepository.AddAsync(employee);
             
             return mapper.Map<EmployeeDto>(created);
@@ -31,7 +31,7 @@ namespace CRMSystem.WebAPI.Services
 
         public async Task<EmployeeDto?> UpdateAsync(Guid id, CreateEmployeeDto dto)
         {
-            var employee = Employee.Create(id, dto.PersonId, dto.Position);
+            var employee = Employee.Create(id, dto.PersonId, dto.Position, dto.Salary);
             var updated = await employeeRepository.UpdateAsync(id, employee);
             
             return updated is null ? null : mapper.Map<EmployeeDto>(updated);

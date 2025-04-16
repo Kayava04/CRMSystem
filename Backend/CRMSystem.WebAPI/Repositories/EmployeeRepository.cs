@@ -49,6 +49,12 @@ namespace CRMSystem.WebAPI.Repositories
                 if (!string.IsNullOrWhiteSpace(employeeFilter.Position))
                     query = query.Where(e => e.Position
                         .Contains(employeeFilter.Position));
+                
+                if (employeeFilter.MinSalary.HasValue)
+                    query = query.Where(e => e.Salary >= employeeFilter.MinSalary.Value);
+
+                if (employeeFilter.MaxSalary.HasValue)
+                    query = query.Where(e => e.Salary <= employeeFilter.MaxSalary.Value);
             }
                 
             return mapper.Map<IEnumerable<Employee>>(await query.ToListAsync());

@@ -16,6 +16,7 @@ namespace CRMSystem.WebAPI.Repositories
             {
                 Id = user.Id,
                 FullName = user.FullName,
+                BirthDate = user.BirthDate,
                 Email = user.Email,
                 Username = user.Username,
                 PasswordHash = user.PasswordHash,

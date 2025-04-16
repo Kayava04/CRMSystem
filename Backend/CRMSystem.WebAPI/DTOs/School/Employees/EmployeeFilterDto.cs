@@ -9,5 +9,7 @@ namespace CRMSystem.WebAPI.DTOs.School.Employees
         public string? Phone { get; set; }
         public string? Email { get; set; }
         public string? Position { get; set; }
+        public float? MinSalary { get; set; }
+        public float? MaxSalary { get; set; }
     }
 }

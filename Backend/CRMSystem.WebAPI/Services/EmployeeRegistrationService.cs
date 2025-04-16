@@ -16,7 +16,7 @@ namespace CRMSystem.WebAPI.Services
             var person = Person.Create(Guid.NewGuid(), dto.FullName, dto.BirthDate);
             var createdPerson = await personRepository.AddAsync(person);
             
-            var employee = Employee.Create(Guid.NewGuid(), createdPerson.Id, dto.Position);
+            var employee = Employee.Create(Guid.NewGuid(), createdPerson.Id, dto.Position, dto.Salary);
             var createdEmployee = await employeeRepository.AddAsync(employee);
             
             var contact = Contact.Create(Guid.NewGuid(), createdPerson.Id, dto.Phone, dto.Email);
@@ -67,7 +67,7 @@ namespace CRMSystem.WebAPI.Services
             var contact = (await contactRepository.GetAllAsync()).FirstOrDefault(c => c.PersonId == person.Id);
             
             person.Update(dto.FullName, dto.BirthDate);
-            employee.Update(dto.Position);
+            employee.Update(dto.Position, dto.Salary);
 
             if (contact != null)
             {

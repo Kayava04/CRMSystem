@@ -10,7 +10,7 @@ namespace CRMSystem.WebAPI.Mappers
         public EmployeeProfile()
         {
             CreateMap<EmployeeEntity, Employee>()
-                .ConstructUsing(e => Employee.Create(e.Id, e.PersonId, e.Position));
+                .ConstructUsing(e => Employee.Create(e.Id, e.PersonId, e.Position, e.Salary));
             
             CreateMap<Employee, EmployeeEntity>();
             CreateMap<Employee, EmployeeDto>();
@@ -22,7 +22,8 @@ namespace CRMSystem.WebAPI.Mappers
                 .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.person.BirthDate))
                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.contact.Phone))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.contact.Email))
-                .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.employee.Position));
+                .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.employee.Position))
+                .ForMember(dest => dest.Salary, opt => opt.MapFrom(src => src.employee.Salary));
             
             CreateMap<RegisterEmployeeResultDto, RegisterEmployeeDto>();
         }

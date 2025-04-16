@@ -10,6 +10,7 @@ namespace CRMSystem.WebAPI.Entities.Auth
         public string PasswordHash { get; set; } = string.Empty;
         public int RoleId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public string? ImageUrl { get; set; }
         
         public RoleEntity Role { get; set; } = null!;

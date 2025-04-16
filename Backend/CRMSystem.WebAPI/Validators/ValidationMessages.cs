@@ -28,7 +28,9 @@ namespace CRMSystem.WebAPI.Validators
         public const string FullNameMustBeCorrect = "FullName must be at least 3 characters long!";
         public const string UserNameMustBeCorrect = "UserName must be at least 4 characters long!";
         public const string PasswordMustBeCorrect = "Password must be at least 6 characters long and contain at least one letter and one number!";
-        public const string EmailMustBeCorrect = "Email Address must be a correct format!";
+        public const string PasswordsDoNotMatch = "Passwords do not match!";
+        public const string OldPasswordIsRequired = "Old password is required!";
+        public const string EmailMustBeCorrect = "Invalid email address!";
         
         // For SignIn Dto
         public const string UsernameIsRequired = "Username is required!";

@@ -37,6 +37,9 @@ namespace CRMSystem.WebAPI.Configurations.Auth
         
             builder.Property(u => u.CreatedAt)
                 .IsRequired();
+            
+            builder.Property(u => u.UpdatedAt)
+                .IsRequired();
         
             builder.HasOne(u => u.Role)
                 .WithMany(r => r.Users)

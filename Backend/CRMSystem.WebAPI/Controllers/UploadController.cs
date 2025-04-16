@@ -26,7 +26,7 @@ namespace CRMSystem.WebAPI.Controllers
 
             if (!Guid.TryParse(userIdClaim.Value, out var userId))
             {
-                logger.LogWarning($"Upload photo attempt failed: Invalid userId format: {userIdClaim.Value}.");
+                logger.LogWarning($"Upload photo attempt failed: Invalid userId format: '{userIdClaim.Value}'.");
                 return BadRequest();
             }
             

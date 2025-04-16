@@ -1,6 +1,7 @@
 using CRMSystem.WebAPI.DTOs.Auth;
 using CRMSystem.WebAPI.DTOs.School.Employees;
 using CRMSystem.WebAPI.DTOs.School.Students;
+using CRMSystem.WebAPI.DTOs.User;
 using CRMSystem.WebAPI.Interfaces;
 
 namespace CRMSystem.WebAPI.Validators
@@ -15,6 +16,7 @@ namespace CRMSystem.WebAPI.Validators
                 RegisterEmployeeDto => new EmployeeValidator(),
                 SignUpRequestDto  => new UserValidator(),
                 SignInRequestDto => new UserValidator(),
+                UpdateUserDto => new UserValidator(),
                 _ => throw new ArgumentException($"Validator for type '{type}' not found.")
             };
         }

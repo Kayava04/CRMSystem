@@ -57,14 +57,16 @@ namespace CRMSystem.WebAPI.Services
                 var existingImageUrl = $"{request.Scheme}://{request.Host}/uploads/{existingFileName}";
 
                 var user = await userRepository.GetUserByIdAsync(userId);
-                if (user == null) throw new InvalidOperationException("User not found");
+                
+                if (user == null)
+                    throw new InvalidOperationException("User not found");
 
                 if (user.ImageUrl != existingImageUrl)
-                {
                     user.SetImageUrl(existingImageUrl);
-                    await userRepository.UpdateAsync(user);
-                }
 
+                user.TouchUpdatedAt();
+                await userRepository.UpdateAsync(user);
+                
                 return existingImageUrl;
             }
             
@@ -73,18 +75,62 @@ namespace CRMSystem.WebAPI.Services
             var newFilePath = Path.Combine(uploadsFolder, newFileName);
 
             fileStream.Position = 0;
+            
             await using var saveStream = new FileStream(newFilePath, FileMode.Create);
             await fileStream.CopyToAsync(saveStream);
 
             var imageUrl = $"{request.Scheme}://{request.Host}/uploads/{newFileName}";
 
             var userToUpdate = await userRepository.GetUserByIdAsync(userId);
-            if (userToUpdate == null) throw new InvalidOperationException("User not found");
+            
+            if (userToUpdate == null)
+                throw new InvalidOperationException("User not found");
 
             userToUpdate.SetImageUrl(imageUrl);
+            userToUpdate.TouchUpdatedAt();
             await userRepository.UpdateAsync(userToUpdate);
 
             return imageUrl;
+        }
+
+        public async Task<User?> GetUserByIdAsync(Guid userId)
+        {
+            var user = await userRepository.GetUserByIdAsync(userId);
+            
+            if (user == null)
+                throw new InvalidOperationException("User not found");
+            
+            return user;
+        }
+
+        public async Task UpdateUserAsync(Guid userId, string fullName, DateTime birthDate, string email,
+            string? oldPassword, string? newPassword, string? confirmNewPassword)
+        {
+            var user = await userRepository.GetUserByIdAsync(userId);
+            
+            if (user == null)
+                throw new InvalidOperationException("User not found");
+            
+            string? newPasswordHash = null;
+
+            var passwordChangeRequested = 
+                !string.IsNullOrWhiteSpace(oldPassword) || 
+                !string.IsNullOrWhiteSpace(newPassword) || 
+                !string.IsNullOrWhiteSpace(confirmNewPassword);
+            
+            if (passwordChangeRequested)
+            {
+                if (string.IsNullOrWhiteSpace(oldPassword) || !passwordHasher.Verify(oldPassword, user.PasswordHash))
+                    throw new InvalidOperationException("Old password is incorrect!");
+
+                if (string.IsNullOrWhiteSpace(newPassword) || newPassword != confirmNewPassword)
+                    throw new InvalidOperationException("New password is invalid or does not match!");
+
+                newPasswordHash = passwordHasher.Generate(newPassword);
+            }
+            
+            user.Update(fullName, birthDate, email, newPasswordHash);
+            await userRepository.UpdateAsync(user);
         }
     }
 }

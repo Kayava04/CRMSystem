@@ -33,7 +33,13 @@ namespace CRMSystem.WebAPI.Validators
                 return false;
             }
             
-            if (student.Grade.HasValue && (student.Grade < 1 || student.Grade > 12))
+            if (student.BirthDate >= DateTime.Now)
+            {
+                errorMessage = ValidationMessages.BirthDateMustBeCorrect;
+                return false;
+            }
+            
+            if (student.Grade.HasValue && (student.Grade < 0 || student.Grade > 12))
             {
                 errorMessage = ValidationMessages.GradeMustBeCorrect;
                 return false;
@@ -75,7 +81,7 @@ namespace CRMSystem.WebAPI.Validators
                 return false;
             }
 
-            if (student.PairNumber <= 0)
+            if (student.PairNumber < 0)
             {
                 errorMessage = ValidationMessages.PairNumberMustBeCorrect;
                 return false;
@@ -84,6 +90,12 @@ namespace CRMSystem.WebAPI.Validators
             if (student.SignDate == default)
             {
                 errorMessage = ValidationMessages.SignDateIsRequired;
+                return false;
+            }
+            
+            if (student.SignDate > DateTime.Now)
+            {
+                errorMessage = ValidationMessages.SignDateMustBeCorrect;
                 return false;
             }
             

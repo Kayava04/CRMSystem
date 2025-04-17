@@ -10,11 +10,15 @@ namespace CRMSystem.WebAPI.Mappers
         public StudentProfile()
         {
             CreateMap<StudentEntity, Student>()
-                .ConstructUsing(e => Student.Create(e.Id, e.PersonId, e.ParentId, e.Grade));
+                .ConstructUsing(e => Student.Create(e.Id, e.PersonId, e.ParentId, e.Grade, e.IsPaid));
 
-            CreateMap<Student, StudentEntity>();
+            CreateMap<Student, StudentEntity>()
+                .ForMember(dest => dest.IsPaid, opt => opt.MapFrom(src => src.IsPaid));
+            
             CreateMap<Student, StudentDto>();
-            CreateMap<CreateStudentDto, Student>();
+            
+            CreateMap<CreateStudentDto, Student>()
+                .ConstructUsing(dto => Student.Create(Guid.NewGuid(), dto.PersonId, dto.ParentId, dto.Grade, false));
             
             CreateMap<(Student student, Person person, Contact contact, Contract contract, Group group, Language language, List<LessonDay> lessonDays, StudentGroup studentGroup, Person? parent), RegisterStudentDto>()
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.person.FullName))
@@ -32,7 +36,8 @@ namespace CRMSystem.WebAPI.Mappers
                     string.Join(", ", src.lessonDays.Select(ld => ld.DayOfWeek.ToString()))
                 ))
                 .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.studentGroup.Level))
-                .ForMember(dest => dest.PairNumber, opt => opt.MapFrom(src => src.studentGroup.PairNumber));
+                .ForMember(dest => dest.PairNumber, opt => opt.MapFrom(src => src.studentGroup.PairNumber))
+                .ForMember(dest => dest.IsPaid, opt => opt.MapFrom(src => src.student.IsPaid));
             
             CreateMap<(Student student, Person person, Contact contact, Contract contract, Group group, Language language, List<LessonDay> lessonDays, StudentGroup studentGroup, Person? parent), RegisterStudentResultDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.student.Id))
@@ -51,7 +56,8 @@ namespace CRMSystem.WebAPI.Mappers
                     string.Join(", ", src.lessonDays.Select(ld => ld.DayOfWeek.ToString()))
                 ))
                 .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.studentGroup.Level))
-                .ForMember(dest => dest.PairNumber, opt => opt.MapFrom(src => src.studentGroup.PairNumber));
+                .ForMember(dest => dest.PairNumber, opt => opt.MapFrom(src => src.studentGroup.PairNumber))
+                .ForMember(dest => dest.IsPaid, opt => opt.MapFrom(src => src.student.IsPaid));
             
             CreateMap<RegisterStudentDto, RegisterStudentResultDto>();
             CreateMap<RegisterStudentResultDto, RegisterStudentDto>();

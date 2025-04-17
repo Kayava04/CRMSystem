@@ -16,14 +16,16 @@ namespace CRMSystem.WebAPI.Custom
                 .Select(c => c.ContractNumber)
                 .ToListAsync();
 
-            var lastSequence = contractNumbers
+            var sequence = contractNumbers
                 .Select(c =>
                 {
                     var parts = c.Split('-');
                     return parts.Length == 3 && int.TryParse(parts[2], out var seq) ? seq : 0;
                 })
-                .Max();
+                .ToList();
 
+            var lastSequence = sequence.Any() ? sequence.Max() : 0;
+            
             var newSequence = lastSequence + 1;
             return $"CTR-{datePart}-{newSequence:D4}";
         }

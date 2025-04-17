@@ -6,6 +6,7 @@ namespace CRMSystem.WebAPI.Entities.School
         public Guid PersonId { get; set; }
         public Guid? ParentId { get; set; }
         public int? Grade { get; set; }
+        public bool IsPaid { get; set; }
 
         public PersonEntity Person { get; set; } = null!;
         public PersonEntity? Parent { get; set; }

@@ -41,6 +41,12 @@ namespace CRMSystem.WebAPI.Validators
                 errorMessage = ValidationMessages.BirthDateIsRequired;
                 return false;
             }
+            
+            if (user.BirthDate >= DateTime.Now)
+            {
+                errorMessage = ValidationMessages.BirthDateMustBeCorrect;
+                return false;
+            }
 
             if (!IsValidEmail(user.Email))
             {
@@ -101,6 +107,12 @@ namespace CRMSystem.WebAPI.Validators
             if (user.BirthDate == default)
             {
                 errorMessage = ValidationMessages.BirthDateIsRequired;
+                return false;
+            }
+            
+            if (user.BirthDate >= DateTime.Now)
+            {
+                errorMessage = ValidationMessages.BirthDateMustBeCorrect;
                 return false;
             }
 

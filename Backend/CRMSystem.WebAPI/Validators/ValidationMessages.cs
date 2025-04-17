@@ -6,6 +6,7 @@ namespace CRMSystem.WebAPI.Validators
         public const string InvalidEmployeeObject = "Employee object is invalid!";
         public const string FullNameIsRequired = "FullName is required!";
         public const string BirthDateIsRequired = "Birth date is required!";
+        public const string BirthDateMustBeCorrect = "Birth date must be correct!";
         public const string PhoneNumberIsRequired = "Phone number is required!";
         public const string EmailIsRequired = "Email address is required!";
         public const string PositionIsRequired = "Position is required!";
@@ -21,6 +22,7 @@ namespace CRMSystem.WebAPI.Validators
         public const string GroupNameIsRequired = "GroupName is required!";
         public const string LessonDaysIsRequired = "LessonDays is required!";
         public const string SignDateIsRequired = "SignDate is required!";
+        public const string SignDateMustBeCorrect = "SignDate must be correct!";
         public const string PaymentAmountMustBeCorrect = "Payment amount cannot be negative!";
         
         // For SignUp Dto

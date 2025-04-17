@@ -26,6 +26,12 @@ namespace CRMSystem.WebAPI.Validators
                 errorMessage = ValidationMessages.BirthDateIsRequired;
                 return false;
             }
+            
+            if (employee.BirthDate >= DateTime.Now)
+            {
+                errorMessage = ValidationMessages.BirthDateMustBeCorrect;
+                return false;
+            }
 
             if (string.IsNullOrWhiteSpace(employee.Phone))
             {

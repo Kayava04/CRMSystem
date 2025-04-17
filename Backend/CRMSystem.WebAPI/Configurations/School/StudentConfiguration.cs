@@ -10,6 +10,9 @@ namespace CRMSystem.WebAPI.Configurations.School
         {
             builder.HasKey(s => s.Id);
 
+            builder.Property(s => s.IsPaid)
+                .IsRequired();
+            
             builder.HasOne(s => s.Person)
                 .WithMany()
                 .HasForeignKey(s => s.PersonId);

@@ -1,6 +1,8 @@
+using CRMSystem.WebAPI.Auth;
 using CRMSystem.WebAPI.DTOs.School.Employees;
 using CRMSystem.WebAPI.Interfaces;
 using CRMSystem.WebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRMSystem.WebAPI.Controllers
@@ -14,6 +16,7 @@ namespace CRMSystem.WebAPI.Controllers
         ILogger<EmployeeRegistrationController> logger) : ControllerBase
     {
         [HttpPost]
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         public async Task<IActionResult> Create([FromBody] RegisterEmployeeDto employeeDto)
         {
             if (!validatorFactory.Validate(employeeDto, out var errorMessage))
@@ -29,6 +32,7 @@ namespace CRMSystem.WebAPI.Controllers
         }
         
         [HttpGet("{id:guid}")]
+        [Authorize(Policy = AuthorizationPolicies.UserOrAdmin)]
         public async Task<IActionResult> GetById(Guid id)
         {
             var employee = await service.GetEmployeeByIdAsync(id);
@@ -44,6 +48,7 @@ namespace CRMSystem.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = AuthorizationPolicies.UserOrAdmin)]
         public async Task<IActionResult> GetAll([FromQuery] EmployeeFilterDto filter)
         {
             var employees = await service.GetAllEmployeesAsync(filter);
@@ -53,6 +58,7 @@ namespace CRMSystem.WebAPI.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         public async Task<IActionResult> Update(Guid id, [FromBody] RegisterEmployeeDto employeeDto)
         {
             if (!validatorFactory.Validate(employeeDto, out var errorMessage))
@@ -71,6 +77,7 @@ namespace CRMSystem.WebAPI.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         public async Task<IActionResult> Delete(Guid id)
         {
             await service.DeleteEmployeeAsync(id);
@@ -80,24 +87,26 @@ namespace CRMSystem.WebAPI.Controllers
         }
 
         [HttpPost("import-file")]
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         public async Task<IActionResult> ImportFile(IFormFile file)
         {
             var data = await fileService.ImportFromFileAsync(file);
 
-            foreach (var employee in data)
-            {
-                if (!validatorFactory.Validate(employee, out var errorMessage))
-                {
-                    logger.LogWarning($"Invalid data found in file '{file.FileName}': {errorMessage}");
-                    return BadRequest(errorMessage);
-                }
-            }
+            // foreach (var employee in data)
+            // {
+            //     if (!validatorFactory.Validate(employee, out var errorMessage))
+            //     {
+            //         logger.LogWarning($"Invalid data found in file '{file.FileName}': {errorMessage}");
+            //         return BadRequest(errorMessage);
+            //     }
+            // }
             
             logger.LogInformation($"Employee data imported successfully from {file.FileName.ToUpper()} file. Total count: {data.Count()}");
             return Ok(data);
         }
 
         [HttpPost("export-file")]
+        [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
         public async Task<IActionResult> ExportDataToFile([FromQuery] string fileName)
         {
             var (data, contentType, downloadName) = await fileService.ExportToFileAsync(fileName);

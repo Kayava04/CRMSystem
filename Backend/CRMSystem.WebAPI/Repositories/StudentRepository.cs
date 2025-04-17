@@ -81,6 +81,9 @@ namespace CRMSystem.WebAPI.Repositories
                 if (!string.IsNullOrWhiteSpace(studentFilter.ContractNumber))
                     query = query.Where(s => s.Contracts
                         .Any(c => c.ContractNumber.Contains(studentFilter.ContractNumber)));
+                
+                if (studentFilter.IsPaid.HasValue)
+                    query = query.Where(s => s.IsPaid == studentFilter.IsPaid.Value);
             }
 
             return mapper.Map<IEnumerable<Student>>(await query.ToListAsync());

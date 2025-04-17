@@ -21,5 +21,6 @@ namespace CRMSystem.WebAPI.DTOs.School.Students
         public DateTime SignDate { get; set; }
         public decimal PaymentAmount { get; set; }
         public string ContractNumber { get; set; }
+        public bool IsPaid { get; set; }
     }
 }

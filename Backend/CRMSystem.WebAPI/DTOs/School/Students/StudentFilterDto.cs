@@ -21,5 +21,6 @@ namespace CRMSystem.WebAPI.DTOs.School.Students
         public int? PairNumber { get; set; }
 
         public string? ContractNumber { get; set; }
+        public bool? IsPaid { get; set; }
     }
 }

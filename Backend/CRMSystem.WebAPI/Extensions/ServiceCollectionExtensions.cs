@@ -47,6 +47,7 @@ namespace CRMSystem.WebAPI.Extensions
             services.AddScoped<EmailService>();
             services.AddScoped<IFileService<RegisterEmployeeDto>, EmployeeFileService>();
             services.AddScoped<IFileService<RegisterStudentDto>, StudentFileService>();
+            services.AddScoped<FinanceReportService>();
             
             // AutoMapper Profiles
             services.AddAutoMapper(typeof(ContactProfile).Assembly);

@@ -1,7 +1,6 @@
 using AutoMapper;
 using CRMSystem.WebAPI.Interfaces;
 using CRMSystem.WebAPI.Models;
-using CRMSystem.WebAPI.DTOs.School.LessonDays;
 using CRMSystem.WebAPI.DTOs.School.Students;
 
 namespace CRMSystem.WebAPI.Services
@@ -65,7 +64,7 @@ namespace CRMSystem.WebAPI.Services
             var parentId = createdParent?.Id;
             var grade = dto?.Grade.HasValue == true && dto.Grade > 0 ? dto.Grade : null;
             
-            var student = Student.Create(Guid.NewGuid(), createdPerson.Id, parentId, grade);
+            var student = Student.Create(Guid.NewGuid(), createdPerson.Id, parentId, grade, dto.IsPaid);
             var createdStudent = await studentRepository.AddAsync(student);
             
             var contractNumber = await contractNumberGenerator.Generate(dto.SignDate);
@@ -164,7 +163,7 @@ namespace CRMSystem.WebAPI.Services
             else parentId = null;
             
             var grade = dto.Grade.HasValue && dto.Grade > 0 ? dto.Grade : null;
-            student.Update(person.Id, parentId, grade);
+            student.Update(person.Id, parentId, grade, dto.IsPaid);
             await studentRepository.UpdateAsync(student.Id, student);
             
             if (contact != null)

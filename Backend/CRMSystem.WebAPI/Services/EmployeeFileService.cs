@@ -9,7 +9,8 @@ namespace CRMSystem.WebAPI.Services
         EmployeeRegistrationService service,
         IFileToolFactory<RegisterEmployeeDto> fileService,
         ILogger<EmployeeFileService> logger,
-        IMapper mapper) : IFileService<RegisterEmployeeDto>
+        IMapper mapper,
+        IValidatorFactory validatorFactory) : IFileService<RegisterEmployeeDto>
     {
         public async Task<IEnumerable<RegisterEmployeeDto>> ImportFromFileAsync(IFormFile file)
         {
@@ -28,6 +29,13 @@ namespace CRMSystem.WebAPI.Services
             foreach (var employee in importedData)
             {
                 employee.BirthDate = DateTime.SpecifyKind(employee.BirthDate, DateTimeKind.Utc);
+                
+                if (!validatorFactory.Validate(employee, out var errorMessage))
+                {
+                    logger.LogWarning($"Invalid student found during import: {errorMessage}");
+                    throw new ApplicationException($"Invalid student data: {errorMessage}.");
+                }
+                
                 await service.CreateEmployeeAsync(employee);
             }
             

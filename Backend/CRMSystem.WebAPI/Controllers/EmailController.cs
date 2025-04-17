@@ -1,5 +1,7 @@
+using CRMSystem.WebAPI.Auth;
 using CRMSystem.WebAPI.DTOs.Email;
 using CRMSystem.WebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRMSystem.WebAPI.Controllers
@@ -11,6 +13,7 @@ namespace CRMSystem.WebAPI.Controllers
         ILogger<EmailController> logger) : ControllerBase
     {
         [HttpPost("send")]
+        [Authorize(Policy = AuthorizationPolicies.UserOrAdmin)]
         public async Task<IActionResult> SendMessage([FromBody] SendMessageDto messageDto)
         {
             var message = await emailService.SendMessageAsync(messageDto);
@@ -20,6 +23,7 @@ namespace CRMSystem.WebAPI.Controllers
         }
 
         [HttpGet("messages/{receiverId:guid}")]
+        [Authorize(Policy = AuthorizationPolicies.UserOrAdmin)]
         public async Task<IActionResult> GetMessagesByReceiverId(Guid receiverId)
         {
             var messages = await emailService.GetMessagesByReceiverIdAsync(receiverId);
